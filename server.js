@@ -5,6 +5,8 @@ import router from "./routes/index.js";
 import cluster from "cluster";
 import os from "os";
 import logTextColor from "./logConfig.js";
+import path from "path";
+import { fileURLToPath } from 'url';
 
 //express initialization
 const app = express();
@@ -21,6 +23,11 @@ app.use(express.urlencoded({ extended: true }))
 
 //routing
 app.use("/", router)
+
+//static files and dirname workaround
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+app.use(express.static(path.join(__dirname, "./public")))
 
 //server port declaration
 const PORT = process.env.PORT || 8080;
