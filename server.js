@@ -1,9 +1,51 @@
 import express from "express";
+import dotenv from "dotenv";
+import compression from "compression";
+import router from "./routes/index.js";
+import cluster from "cluster";
+import os from "os";
+import logTextColor from "./logConfig.js";
 
+//express initialization
 const app = express();
 
-const PORT = 8080;
+//dotenv
+dotenv.config();
 
-app.listen(PORT, () => {
-    console.log(`Initialized server listening port: ${PORT}`)
-})
+//compression middleware (gzip)
+app.use(compression());
+
+//request body access middleware
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+
+//routing
+app.use("/", router)
+
+//server port declaration
+const PORT = process.env.PORT || 8080;
+
+//request-processing mode logic
+const processMode = process.env.PROCESSING_MODE.toUpperCase();
+
+const cpus = os.cpus();
+
+if(processMode === "CLUSTER" && cluster.isPrimary){
+    cpus.map(() => {
+        cluster.fork()
+    })
+
+    cluster.on("exit", (worker) => {
+        console.log(`Worker ${worker.process.pid} died, spawning a new worker`)
+        cluster.fork();
+    })
+} else {
+    //server start
+    app.listen(PORT, () => {
+        if(processMode === "CLUSTER"){
+            console.log(`Server cluster initialized on port`, `${logTextColor.yellow}${PORT}${logTextColor.end}`, `- pid:`, `${logTextColor.cyan}${process.pid}${logTextColor.end}`)
+        } else {
+            console.log(`Initialized server listening port:`, `${logTextColor.yellow}${PORT}${logTextColor.end}`)
+        }
+    })
+}
