@@ -1,5 +1,5 @@
 import express from "express";
-import { ProductDao } from "../DAOs/index.js";
+import { ProductService } from "../Services/index.js";
 
 const router = express.Router();
 
@@ -15,11 +15,11 @@ router.route("/secret")
 
 router.route("/products")
 .post(async (req, res) => {
-    const response = await ProductDao.writeDoc(req.body);
+    const response = await ProductService.writeDoc(req.body);
     res.json(response);
 })
 .get(async (req, res) => {
-    const response = await ProductDao.getAll();
+    const response = await ProductService.getAll();
     res.json(response);
 })
 

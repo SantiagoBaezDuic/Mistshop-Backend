@@ -7,6 +7,7 @@ import os from "os";
 import logTextColor from "./logConfig.js";
 import path from "path";
 import { fileURLToPath } from 'url';
+import cors from "cors";
 
 //express initialization
 const app = express();
@@ -20,6 +21,9 @@ app.use(compression());
 //request body access middleware
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+
+//cors middleware
+app.use(cors())
 
 //routing
 app.use("/", router)
