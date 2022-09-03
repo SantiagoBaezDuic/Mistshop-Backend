@@ -3,7 +3,7 @@ Hi!, this is an express server that will give support to an ecommerce frontend p
 Files to add at root level:
 
 configFiles folder containing:
--firebase json key data called "firebase-key.json".
+-firebase-key.js with a variable called "account" wich is an object with the firebase service account settings being default exported.
 
 .env file containing:
 -PORT with the choosen port number.
