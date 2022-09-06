@@ -44,6 +44,51 @@ class FBContainer{
             return (docData.data() ? docData.data() : `Error al buscar el documento con id ${id}`)
         } catch (error) {
             console.log(`Error al buscar el documento con id ${id}`)
+            return { error: `Error searching for document with id ${id}`};
+        }
+    }
+
+    async findByProp(prop, input, prop2, input2){
+        if(prop2 && input2){
+            try {
+                const querySnapshot = await this.collection.where(prop, "==", input).where(prop2, "==", input2).get();
+                
+                if (querySnapshot.empty) {
+                    console.log('No matching documents.');
+                    return { error: "No documents matching the query"};
+                  }
+                  
+                  let array = [];
+    
+                  querySnapshot.forEach(doc => {
+                    array.push(doc.data());
+                    array[array.length - 1].docId = doc.id;
+                  });
+    
+                  return array;
+            } catch (error) {  
+                console.log(`Error al buscar por propiedad ${prop} == ${input}`, error)
+            }
+        } else {
+            try {
+                const querySnapshot = await this.collection.where(prop, "==", input).get();
+                
+                if (querySnapshot.empty) {
+                    console.log('No matching documents.');
+                    return { error: "No documents matching the query"};
+                  }
+                  
+                  let array = [];
+    
+                  querySnapshot.forEach(doc => {
+                    array.push(doc.data());
+                    array[array.length - 1].docId = doc.id;
+                  });
+    
+                  return array;
+            } catch (error) {  
+                console.log(`Error al buscar por propiedad ${prop} == ${input}`, error)
+            }
         }
     }
 

@@ -8,6 +8,8 @@ import logTextColor from "./logConfig.js";
 import path from "path";
 import { fileURLToPath } from 'url';
 import cors from "cors";
+import session from "express-session";
+import cookieParser from "cookie-parser";
 
 //express initialization
 const app = express();
@@ -24,6 +26,9 @@ app.use(express.urlencoded({ extended: true }))
 
 //cors middleware
 app.use(cors())
+
+//cookies middleware
+app.use(cookieParser())
 
 //routing
 app.use("/", router)
