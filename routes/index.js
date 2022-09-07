@@ -1,6 +1,5 @@
-import express, { json } from "express";
+import express from "express";
 import { ProductService, UsersService } from "../Services/index.js";
-import { encryptPassword } from "../Services/bcrypt/index.js";
 
 const router = express.Router();
 
@@ -11,28 +10,43 @@ router.route("/")
 
 router.route("/secret")
 .get((req, res) => {
-    res.json("Are you looking for something?")
+    res.json("There's always another secret...")
 })
 
 router.route("/products")
 .post(async (req, res) => {
-    const response = await ProductService.writeDoc(req.body);
-    res.json(response);
+    if(req.sessions.admin){
+        const response = await ProductService.writeDoc(req.body);
+        res.json(response);
+    } else {
+        res.json({ error: "Insufficient permissions."})
+    }
 })
 .get(async (req, res) => {
     const response = await ProductService.getAll();
     res.json(response);
 })
 
-router.route("/cookie")
-.get((req, res) => {
-    res.cookie("cookie_name" , 'cookie_value').send('Cookie is set');
-})
-
 router.route("/login")
 .post(async (req, res) => {
     const response = await UsersService.Authentication(req.body)
-    res.json(response);
+    if(response.state !== "success"){
+        res.json(response)
+    } else {
+        req.session.user = response.user;
+        req.session.admin = response.admin;
+        req.session.email = response.email;
+        req.session.uid = response.uid;
+        res.json({response: response});
+    }
+})
+
+router.route("/logout")
+.get(async (req, res) => {
+    req.session.destroy( error => {
+        if(!error)res.send({ state: "success"})
+        else res.send({ error: `Logout error.`, body: error})
+    });
 })
 
 router.route("/register")
@@ -43,8 +57,7 @@ router.route("/register")
 
 router.route("/test")
 .get(async (req, res) => {
-    const response = await UsersService.Register({email: "santi2@mail.com", type: "test"})
-    res.json(response);
+    res.json("TEST");
 })
 
 export default router;

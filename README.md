@@ -8,6 +8,7 @@ configFiles folder containing:
 .env file containing:
 -PORT with the choosen port number.
 -PROCESSING_MODE with either "fork" or "cluster" uppercase not needed.
+-SECRET with a string for usage on both the session and the cookies.
 
 Remember to run "npm i" to download the required node modules.
 

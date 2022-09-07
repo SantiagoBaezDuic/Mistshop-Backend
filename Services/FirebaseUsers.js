@@ -26,13 +26,13 @@ class UsersFB extends FBContainer {
     async Authentication(obj){
         const comparison = await this.findByProp("email", obj.email)
         if(comparison.content === "empty"){
-            return { error: "No account associated to this email."}
+            return { error: "No account associated to this email.", state: "failure"}
         } else {
             const content = await comparePassword(obj.password, comparison[0].password)
             if(content){
-                return { ok: "Credentials authenticated."}
+                return { msg: "Credentials authenticated.", state: "success", user: comparison[0].username, admin: comparison[0].admin, uid: comparison[0].docId, email: comparison[0].email}
             } else {
-                return { error: "Credentials don't match"}
+                return { error: "Credentials don't match", state: "failure"}
             }
         }
     }

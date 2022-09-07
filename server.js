@@ -9,7 +9,6 @@ import path from "path";
 import { fileURLToPath } from 'url';
 import cors from "cors";
 import session from "express-session";
-import cookieParser from "cookie-parser";
 
 //express initialization
 const app = express();
@@ -27,8 +26,12 @@ app.use(express.urlencoded({ extended: true }))
 //cors middleware
 app.use(cors())
 
-//cookies middleware
-app.use(cookieParser())
+//session middleware
+app.use(session({
+    secret: process.env.SECRET || "",
+    resave: true,
+    saveUninitialized: true,
+}))
 
 //routing
 app.use("/", router)
