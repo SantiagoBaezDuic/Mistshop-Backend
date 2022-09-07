@@ -19,7 +19,7 @@ class UsersFB extends FBContainer {
             const content = await this.writeDoc(data)
             return content;
         } else {
-            return { error: "Email already associated to an existing account."}
+            return { state: "failure", error: "Email already associated to an existing account." }
         }
     }
 
@@ -32,7 +32,7 @@ class UsersFB extends FBContainer {
             if(content){
                 return { msg: "Credentials authenticated.", state: "success", user: comparison[0].username, admin: comparison[0].admin, uid: comparison[0].docId, email: comparison[0].email}
             } else {
-                return { error: "Credentials don't match", state: "failure"}
+                return { error: "Credentials don't match", state: "failure" }
             }
         }
     }

@@ -18,9 +18,10 @@ class FBContainer{
         
         try {
             await this.collection.doc().create(obj)
-            return {ok: `Documento guardado con éxito.`}
+            return { state: "success", ok: `Documento guardado con éxito.`}
         } catch (error) {
             console.log(`Ocurrió un error al guardar el documento, ${error}`)
+            return { state: "failure", error: "Ha ocurrido un error al guardar el documento." }
         }
     }
 
@@ -35,6 +36,7 @@ class FBContainer{
             return resp;
         } catch (error) {
             console.log(`Error al buscar los documentos, ${error}`)
+            return { state: "failure", error: "Ha ocurrido un error al buscar los documentos." }
         }
     }
 
@@ -44,7 +46,7 @@ class FBContainer{
             return (docData.data() ? docData.data() : `Error al buscar el documento con id ${id}`)
         } catch (error) {
             console.log(`Error al buscar el documento con id ${id}`)
-            return { error: `Error searching for document with id ${id}`};
+            return { state: "failure", error: `Error searching for document with id ${id}` };
         }
     }
 
@@ -54,7 +56,7 @@ class FBContainer{
                 const querySnapshot = await this.collection.where(prop, "==", input).where(prop2, "==", input2).get();
                 
                 if (querySnapshot.empty) {
-                    return { error: "No documents matching the query", content: "empty"};
+                    return { error: "No documents matching the query", content: "empty" };
                   }
                   
                   let array = [];
@@ -67,13 +69,14 @@ class FBContainer{
                   return array;
             } catch (error) {  
                 console.log(`Error al buscar por propiedad ${prop} == ${input}`, error)
+                return { state: "failure", error: `Error al buscar por propiedadades.` }
             }
         } else {
             try {
                 const querySnapshot = await this.collection.where(prop, "==", input).get();
                 
                 if (querySnapshot.empty) {
-                    return { error: "No documents matching the query", content: "empty"};
+                    return { error: "No documents matching the query", content: "empty" };
                   }
                   
                   let array = [];
@@ -86,28 +89,28 @@ class FBContainer{
                   return array;
             } catch (error) {  
                 console.log(`Error al buscar por propiedad ${prop} == ${input}`, error)
+                return { state: "failure", error: `Error al buscar por propiedad.` }
             }
         }
     }
 
-    async updateDoc(obj, id){
-        obj.id = id;
-        obj.timestamp = Date.now();
-
+    async updateDoc(id, data){
         try {
-            await this.collection.doc(id).update(obj)
-            return {ok: `Documento actualizado correctamente.`}
+            await this.collection.doc(id).update(data)
+            return { state: "success", ok: `Documento actualizado correctamente.` }
         } catch (error) {
             console.log(`Error al actualizar el documento, ${error}`)
+            return { state: "failure", error: "Error al actualizar el documento." }
         }
     }
 
     async deleteDoc(id){
         try {
             await this.collection.doc(id).delete({exists: true})
-            return {ok: `Documento borrado con éxito.`}
+            return { state: "success", ok: `Documento borrado con éxito.` }
         } catch (error) {
             console.log(`Error al borrar el documento, ${error}`)
+            return { state: "failure", error: "Error al borrar el documento." }
         }
     }
 }

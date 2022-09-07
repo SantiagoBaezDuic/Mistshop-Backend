@@ -1,5 +1,5 @@
 import express from "express";
-import { ProductService, UsersService } from "../Services/index.js";
+import { CartService, ProductService, UsersService } from "../Services/index.js";
 
 const router = express.Router();
 
@@ -15,7 +15,7 @@ router.route("/secret")
 
 router.route("/products")
 .post(async (req, res) => {
-    if(req.sessions.admin){
+    if(req.session.admin){
         const response = await ProductService.writeDoc(req.body);
         res.json(response);
     } else {
@@ -24,6 +24,17 @@ router.route("/products")
 })
 .get(async (req, res) => {
     const response = await ProductService.getAll();
+    res.json(response);
+})
+
+router.route("/cart")
+.get(async (req, res) => {
+    const response = await CartService.findByProp("owner", req.session.email);
+    res.json(response);
+})
+.post(async (req, res) => {
+    const prod = await ProductService.findByProp("code", req.body.code);
+    const response = await CartService.updateCart(req.body.email, prod, req.body.add, req.body.amount);
     res.json(response);
 })
 
@@ -52,6 +63,9 @@ router.route("/logout")
 router.route("/register")
 .post(async (req, res) => {
     const response = await UsersService.Register(req.body);
+    console.log("accStatus", response)
+    const cart = await CartService.initializeCart(req.body.email);
+    console.log("cartStatus", cart)
     res.json(response);
 })
 
