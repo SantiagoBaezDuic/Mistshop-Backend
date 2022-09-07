@@ -1,5 +1,6 @@
 import express, { json } from "express";
 import { ProductService, UsersService } from "../Services/index.js";
+import { encryptPassword } from "../Services/bcrypt/index.js";
 
 const router = express.Router();
 
@@ -30,19 +31,19 @@ router.route("/cookie")
 
 router.route("/login")
 .post(async (req, res) => {
-    const response = await UsersService.findByProp("email", req.body.email)
+    const response = await UsersService.Authentication(req.body)
     res.json(response);
 })
 
 router.route("/register")
 .post(async (req, res) => {
-    const response = await UsersService.writeDoc(req.body);
+    const response = await UsersService.Register(req.body);
     res.json(response);
 })
 
 router.route("/test")
 .get(async (req, res) => {
-    const response = await ProductService.findByProp("name", "Tin Dust", "price", "35");
+    const response = await UsersService.Register({email: "santi2@mail.com", type: "test"})
     res.json(response);
 })
 

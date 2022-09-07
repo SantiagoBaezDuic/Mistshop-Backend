@@ -54,8 +54,7 @@ class FBContainer{
                 const querySnapshot = await this.collection.where(prop, "==", input).where(prop2, "==", input2).get();
                 
                 if (querySnapshot.empty) {
-                    console.log('No matching documents.');
-                    return { error: "No documents matching the query"};
+                    return { error: "No documents matching the query", content: "empty"};
                   }
                   
                   let array = [];
@@ -74,8 +73,7 @@ class FBContainer{
                 const querySnapshot = await this.collection.where(prop, "==", input).get();
                 
                 if (querySnapshot.empty) {
-                    console.log('No matching documents.');
-                    return { error: "No documents matching the query"};
+                    return { error: "No documents matching the query", content: "empty"};
                   }
                   
                   let array = [];
