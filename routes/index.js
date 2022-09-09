@@ -27,17 +27,6 @@ router.route("/products")
     res.json(response);
 })
 
-router.route("/cart")
-.get(async (req, res) => {
-    const response = await CartService.findByProp("owner", req.session.email);
-    res.json(response);
-})
-.post(async (req, res) => {
-    const prod = await ProductService.findByProp("code", req.body.code);
-    const response = await CartService.updateCart(req.body.email, prod, req.body.add, req.body.amount);
-    res.json(response);
-})
-
 router.route("/login")
 .post(async (req, res) => {
     const response = await UsersService.Authentication(req.body)
@@ -48,8 +37,21 @@ router.route("/login")
         req.session.admin = response.admin;
         req.session.email = response.email;
         req.session.uid = response.uid;
+        console.log(req.session)
         res.json({response: response});
     }
+})
+
+router.route("/cart")
+.get(async (req, res) => {
+    console.log(req.session)
+    const response = await CartService.findByProp("owner", req.session.email);
+    res.json(response);
+})
+.post(async (req, res) => {
+    const prod = await ProductService.findByProp("code", req.body.code);
+    const response = await CartService.updateCart(req.body.email, prod, req.body.add, req.body.amount);
+    res.json(response);
 })
 
 router.route("/logout")
