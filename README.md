@@ -2,13 +2,20 @@ Hi!, this is an express server that will give support to an ecommerce frontend p
 
 Files to add at root level:
 
-configFiles folder containing:
--firebase-key.js with a variable called "account" wich is an object with the firebase service account settings being default exported.
-
 .env file containing:
 -PORT with the choosen port number.
 -PROCESSING_MODE with either "fork" or "cluster" uppercase not needed.
 -SECRET with a string for usage on both the session and the cookies.
+---The following variables are all part of the .json file firebase gives you as the service account data, so they wont be explained further---
+-TYPE
+-PROJECT_ID
+-PRIVATE_KEY_ID
+-CLIENT_EMAIL
+-CLIENT_ID
+-AUTH_URI
+-TOKEN_URI
+-AUTH_PROVIDER_X509_CERT_URL
+-CLIENT_X509_CERT_URL
 
 Remember to run "npm i" to download the required node modules.
 
