@@ -7,6 +7,7 @@ import dotenv from "dotenv";
 import compression from "compression";
 import router from "./routes/index.js";
 import os from "os";
+import MongoStore from "connect-mongo";
 
 //express initialization
 const app = express();
@@ -14,11 +15,19 @@ const app = express();
 //dotenv
 dotenv.config();
 
+//mongoatlas configuration
+const advancedOptions = { useNewUrlParser: true, useUnifiedTopology: true };
+
 //session middleware
 app.use(session({
     secret: process.env.SECRET || "",
     resave: false,
     saveUninitialized: true,
+    cookie: { maxAge: 300000 },
+    store: MongoStore.create({
+        mongoUrl: process.env.MONGO_ATLAS_STRING,
+        // mongoOptions: advancedOptions,
+    }),
 }))
 
 //compression middleware (gzip)

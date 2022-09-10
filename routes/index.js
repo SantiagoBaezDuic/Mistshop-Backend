@@ -15,8 +15,8 @@ router.route("/secret")
 
 router.route("/products")
 .post(async (req, res) => {
-    if(req.session.admin){
-        const response = await ProductService.writeDoc(req.body);
+    if(true){//cambiar true a req.session.admin
+        const response = await ProductService.loadProduct(req.body);
         res.json(response);
     } else {
         res.json({ error: "Insufficient permissions."})
