@@ -15,7 +15,7 @@ router.route("/secret")
 
 router.route("/products")
 .post(async (req, res) => {
-    if(true){//cambiar true a req.session.admin
+    if(req.session.admin){
         const response = await ProductService.loadProduct(req.body);
         res.json(response);
     } else {
@@ -37,7 +37,7 @@ router.route("/login")
         req.session.admin = response.admin;
         req.session.email = response.email;
         req.session.uid = response.uid;
-        console.log(req.session)
+        console.log("idlog", req.session.id)
         res.json({response: response});
     }
 })
