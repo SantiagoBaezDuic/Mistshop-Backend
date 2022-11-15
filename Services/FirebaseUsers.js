@@ -1,5 +1,6 @@
 import FBContainer from "../Containers/FirebaseContainer.js";
 import { encryptPassword, comparePassword } from "./bcrypt/index.js";
+import { generateToken, verifyToken } from "./jwt/index.js";
 
 class UsersFB extends FBContainer {
     constructor(){
@@ -30,7 +31,8 @@ class UsersFB extends FBContainer {
         } else {
             const content = await comparePassword(obj.password, comparison[0].password)
             if(content){
-                return { msg: "Credentials authenticated.", state: "success", user: comparison[0].username, admin: comparison[0].admin, uid: comparison[0].docId, email: comparison[0].email}
+                const token = generateToken(comparison);
+                return { msg: "Credentials authenticated.", state: "success", token: token, admin: comparison[0].admin }
             } else {
                 return { error: "Credentials don't match", state: "failure" }
             }

@@ -21,12 +21,12 @@ const advancedOptions = { useNewUrlParser: true, useUnifiedTopology: true };
 //session middleware
 app.use(session({
     secret: process.env.SECRET || "",
-    resave: false,
+    resave: true,
     saveUninitialized: true,
-    cookie: { maxAge: 300000 },
     store: MongoStore.create({
         mongoUrl: process.env.MONGO_ATLAS_STRING,
-        // mongoOptions: advancedOptions,
+        mongoOptions: advancedOptions,
+        autoRemove: `native`
     }),
 }))
 

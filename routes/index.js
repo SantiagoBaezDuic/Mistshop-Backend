@@ -1,5 +1,6 @@
 import express from "express";
 import { CartService, ProductService, UsersService } from "../Services/index.js";
+import { AuthMiddleware } from "../Services/jwt/index.js";
 
 const router = express.Router();
 
@@ -33,21 +34,20 @@ router.route("/login")
     if(response.state !== "success"){
         res.json(response)
     } else {
-        req.session.user = response.user;
-        req.session.admin = response.admin;
-        req.session.email = response.email;
-        req.session.uid = response.uid;
-        console.log("idlog", req.session.id)
         res.json({response: response});
     }
 })
 
-router.route("/cart")
-.get(async (req, res) => {
-    console.log(req.session)
-    const response = await CartService.findByProp("owner", req.session.email);
-    res.json(response);
+router.get("/cart", AuthMiddleware, (req, res) => {
+    console.log("got here")
+    res.json("Success!")
 })
+router.route("/cart")
+// .get(AuthMiddleware, async (req, res) => {
+    
+//     // const response = await CartService.findByProp("owner", req.session.email);
+//     res.json(response);
+// })
 .post(async (req, res) => {
     const prod = await ProductService.findByProp("code", req.body.code);
     const response = await CartService.updateCart(req.body.email, prod, req.body.add, req.body.amount);
