@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+
 const PRIVATE_KEY = process.env.JWT_KEY;
 
 function generateToken(user){
@@ -17,13 +18,14 @@ function verifyToken(token){
     return resp;
 }
 
-function AuthMiddleware(req, res, next){
+async function AuthMiddleware(req, res, next){
     const headerToken = req.headers.authorization;
 
     if(!headerToken){
         return { status: "failure", message: "Access denied" };
     } else {
         const token = headerToken.split(" ")[1];
+        //Me faltaría poder conseguir la blacklist de tokens para poder chequear que no esté el token utilizado
         const response = verifyToken(token);
         if(response.status === "success"){
             next();

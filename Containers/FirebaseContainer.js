@@ -52,6 +52,24 @@ class FBContainer{
         }
     }
 
+    async getCategory(filter){
+        try {
+            const docData = await this.collection.get();
+
+            const resp = docData.docs.map((el) => ({
+                id:el.id,
+                ...el.data()
+            }))
+            
+            const filtered = resp.filter((el) => {return el.type === filter})
+            console.log("filtered----", filtered)
+            return filtered
+        } catch (error) {
+            console.log(`Error al buscar los documentos, ${error}`)
+            return { state: "failure", error: "Ha ocurrido un error al buscar los documentos." }
+        }
+    }
+
     async getOne(id){
         try {
             const docData = await this.collection.doc(id).get()
