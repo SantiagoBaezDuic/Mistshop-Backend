@@ -7,18 +7,9 @@ Files to add at root level:
 -PROCESSING_MODE with either "fork" or "cluster" uppercase not needed.
 -SECRET with a string for usage on both the session and the cookies.
 -MONGO_ATLAS_STRING with the nodejs connection string provided by mongoatlas, replacing the password and the collection name.
--ETHEREAL_MAIL a string with the email from an Ethereal account
--ETHEREAL_PASS a string with the password from an Ethereal account
----The following variables are all part of the .json file firebase gives you as the service account data, so they wont be explained further---
--TYPE
--PROJECT_ID
--PRIVATE_KEY_ID
--CLIENT_EMAIL
--CLIENT_ID
--AUTH_URI
--TOKEN_URI
--AUTH_PROVIDER_X509_CERT_URL
--CLIENT_X509_CERT_URL
+-ETHEREAL_MAIL a string with the email from an Ethereal account.
+-ETHEREAL_PASS a string with the password from an Ethereal account.
+-FIREBASE_ACCOUNT with the firebase service account json data without the line breaks.
 
 Remember to run "npm i" to download the required node modules.
 
