@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.route("/")
 .get((req, res) => {
-    res.json("Welcome to Mistshop! - Work in progress")
+    res.json("Welcome to the Mistshop API! - You can check the site at: https://mistshop-frontend.vercel.app/")
 })
 
 router.route("/secret")
