@@ -3,10 +3,11 @@ import { CartService, ProductService, UsersService, OrdersService, TokensService
 import { AuthMiddleware } from "../Services/jwt/index.js";
 
 const router = express.Router();
+const frontURL = "https://mistshop-frontend.vercel.app/"
 
 router.route("/")
 .get((req, res) => {
-    res.json("Welcome to the Mistshop API! - You can check the site at: https://mistshop-frontend.vercel.app/")
+    res.json("Welcome to the Mistshop API! - You can check the site at: " + frontURL)
 })
 
 router.route("/secret")
