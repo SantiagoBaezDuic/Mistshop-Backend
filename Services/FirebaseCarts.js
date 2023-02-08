@@ -10,7 +10,8 @@ class CartFB extends FBContainer {
         let cart = {
             products: [],
             owner: email,
-            timestamp: Date.now()
+            timestamp: Date.now(),
+            totalPrice: 0,
         }
 
         const resp = await this.writeDoc(cart);
@@ -22,7 +23,8 @@ class CartFB extends FBContainer {
         const decode = verifyToken(splitted);
         if(decode.status === "success"){
             let cart = await this.findByProp("owner", decode.decoded.data[0].email)
-            return cart;
+            console.log(cart);
+            return cart[0].products;
         } else {
             return decode;
         }
