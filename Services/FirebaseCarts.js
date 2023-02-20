@@ -22,9 +22,16 @@ class CartFB extends FBContainer {
         const splitted = token.split(" ")[1];
         const decode = verifyToken(splitted);
         if(decode.status === "success"){
+            let cartPrice = 0;
             let cart = await this.findByProp("owner", decode.decoded.data[0].email)
-            console.log(cart);
-            return cart[0].products;
+            cart[0].products.map((obj) => {
+                cartPrice += obj.price * obj.amount
+            })
+            const finalCart = {
+                products: cart[0].products,
+                price: cartPrice
+            }
+            return finalCart;
         } else {
             return decode;
         }
@@ -50,7 +57,7 @@ class CartFB extends FBContainer {
             }
         } else if (add) {
             let array = cart[0].products;
-            array.push({code: product[0].code, amount: value, price: product[0].price})
+            array.push({code: product[0].code, amount: value, price: Number(product[0].price)})
             const resp = await this.updateDoc(cart[0].docId, {products: array})
             return resp
         } else {
